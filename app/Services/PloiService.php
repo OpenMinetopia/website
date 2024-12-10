@@ -609,6 +609,4 @@ BASH;
             return false;
         }
     }
-
-    // ... other methods remain the same but with improved error handling
 }
