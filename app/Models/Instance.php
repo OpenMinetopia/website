@@ -33,7 +33,9 @@ class Instance extends Model
         'ploi_database_password',
         'ploi_ssl_enabled',
         'ploi_deployment_status',
-        'ploi_deployment_error'
+        'ploi_deployment_error',
+        'minecraft_server_host',
+        'minecraft_plugin_ip'
     ];
 
     protected $casts = [
