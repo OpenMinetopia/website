@@ -170,14 +170,14 @@ class PloiService
             $deploymentScript = <<<BASH
 cd /home/ploi/{$instance->hostname}
 
-# Put application in maintenance mode
-php artisan down
-
 # Pull latest changes
 git pull origin {$this->settings->repository_branch}
 
 # Install/update PHP dependencies
 composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+# Put application in maintenance mode
+php artisan down
 
 # Run database migrations first
 php artisan migrate --force
@@ -396,7 +396,7 @@ BASH;
 
         foreach ($lines as $line) {
             $line = trim($line);
-            
+
             // Skip empty lines and comments
             if (empty($line) || str_starts_with($line, '#')) {
                 continue;
@@ -422,7 +422,7 @@ BASH;
     protected function arrayToEnvFormat(array $envArray): string
     {
         $content = '';
-        
+
         // Application
         $content .= "# Application Settings\n";
         foreach (['APP_NAME', 'APP_ENV', 'APP_KEY', 'APP_DEBUG', 'APP_URL'] as $key) {
@@ -430,7 +430,7 @@ BASH;
                 $content .= "{$key}={$envArray[$key]}\n";
             }
         }
-        
+
         // Database
         $content .= "\n# Database Configuration\n";
         foreach (['DB_CONNECTION', 'DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD'] as $key) {
@@ -438,7 +438,7 @@ BASH;
                 $content .= "{$key}={$envArray[$key]}\n";
             }
         }
-        
+
         // API Keys
         $content .= "\n# API Configuration\n";
         foreach (['MINECRAFT_API_KEY', 'PLUGIN_API_KEY'] as $key) {
@@ -523,7 +523,7 @@ BASH;
             }
 
             $siteData = $response->json()['data'];
-            
+
             // Update instance with site ID
             $instance->update([
                 'ploi_site_id' => $siteData['id']
