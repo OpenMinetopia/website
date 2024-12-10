@@ -129,6 +129,52 @@
                     </div>
                 </div>
 
+                <!-- Minecraft Configuration Section -->
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
+                    <div class="p-6">
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Minecraft Server Configuratie</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="minecraft_server_host" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Server Host
+                                </label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <input type="text" name="minecraft_server_host" id="minecraft_server_host"
+                                        class="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                                        placeholder="play.openminetopia.nl"
+                                        value="{{ old('minecraft_server_host') }}"
+                                        required>
+                                </div>
+                                @error('minecraft_server_host')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    De hostname waarop je Minecraft server draait (bijv. play.openminetopia.nl)
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="minecraft_plugin_ip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Plugin API Adres
+                                </label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <input type="text" name="minecraft_plugin_ip" id="minecraft_plugin_ip"
+                                        class="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                                        placeholder="127.0.0.1:25570"
+                                        value="{{ old('minecraft_plugin_ip') }}"
+                                        required>
+                                </div>
+                                @error('minecraft_plugin_ip')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    Het IP-adres en poort waar de plugin API op draait. Let op: dit is een andere poort dan je Minecraft server.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-end">
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Portal aanmaken

@@ -55,8 +55,8 @@ class InstanceResource extends Resource
                                             ]),
                                     ]),
 
-                                Forms\Components\Section::make('Deployment Information')
-                                    ->description('Deployment status and configuration')
+                                Forms\Components\Section::make('Deployment Status')
+                                    ->description('Current deployment information')
                                     ->icon('heroicon-m-rocket-launch')
                                     ->schema([
                                         Forms\Components\Grid::make(2)
@@ -67,60 +67,53 @@ class InstanceResource extends Resource
                                                         'in_progress' => 'In Progress',
                                                         'completed' => 'Completed',
                                                         'failed' => 'Failed',
-                                                    ]),
+                                                    ])
+                                                    ->disabled(),
+                                                Forms\Components\Select::make('ploi_deployment_status')
+                                                    ->label('Ploi Status')
+                                                    ->options([
+                                                        'pending' => 'Pending',
+                                                        'creating_site' => 'Creating Site',
+                                                        'creating_database' => 'Creating Database',
+                                                        'configuring_env' => 'Configuring Environment',
+                                                        'installing_repository' => 'Installing Repository',
+                                                        'requesting_ssl' => 'Requesting SSL',
+                                                        'deploying' => 'Deploying',
+                                                        'completed' => 'Completed',
+                                                        'failed' => 'Failed'
+                                                    ])
+                                                    ->disabled(),
                                                 Forms\Components\DateTimePicker::make('last_deployment_at')
                                                     ->label('Last Deployed At')
                                                     ->disabled(),
-                                                Forms\Components\DateTimePicker::make('last_backup_at')
-                                                    ->label('Last Backup At')
-                                                    ->disabled(),
+                                                Forms\Components\Textarea::make('ploi_deployment_error')
+                                                    ->label('Last Deployment Error')
+                                                    ->disabled()
+                                                    ->columnSpanFull()
+                                                    ->visible(fn ($record) => !empty($record->ploi_deployment_error)),
+                                            ]),
+                                    ]),
+
+                                Forms\Components\Section::make('Minecraft Configuration')
+                                    ->description('Server and plugin connection details')
+                                    ->icon('heroicon-m-cube')
+                                    ->schema([
+                                        Forms\Components\Grid::make(2)
+                                            ->schema([
+                                                Forms\Components\TextInput::make('minecraft_server_host')
+                                                    ->label('Server Host')
+                                                    ->placeholder('play.openminetopia.nl'),
+                                                Forms\Components\TextInput::make('minecraft_plugin_ip')
+                                                    ->label('Plugin API Address')
+                                                    ->placeholder('127.0.0.1:25570'),
                                             ]),
                                     ]),
                             ]),
 
-                        // API & Status (Right Column - 1 span)
+                        // Status & Info (Right Column - 1 span)
                         Forms\Components\Group::make()
                             ->columnSpan(1)
                             ->schema([
-                                Forms\Components\Section::make('API Tokens')
-                                    ->description('Authentication tokens for plugin and portal')
-                                    ->icon('heroicon-m-key')
-                                    ->schema([
-                                        Forms\Components\TextInput::make('plugin_api_token')
-                                            ->label('Plugin API Token')
-                                            ->disabled()
-                                            ->suffixAction(
-                                                Forms\Components\Actions\Action::make('copyPluginToken')
-                                                    ->icon('heroicon-m-clipboard')
-                                                    ->tooltip('Copy to clipboard')
-                                                    ->action(function ($record) {
-                                                        Notification::make()
-                                                            ->title('Copied!')
-                                                            ->success()
-                                                            ->send();
-                                                        return "navigator.clipboard.writeText('{$record->plugin_api_token}')";
-                                                    })
-                                            ),
-                                        Forms\Components\TextInput::make('instance_api_token')
-                                            ->label('Instance API Token')
-                                            ->disabled()
-                                            ->suffixAction(
-                                                Forms\Components\Actions\Action::make('copyInstanceToken')
-                                                    ->icon('heroicon-m-clipboard')
-                                                    ->tooltip('Copy to clipboard')
-                                                    ->action(function ($record) {
-                                                        Notification::make()
-                                                            ->title('Copied!')
-                                                            ->success()
-                                                            ->send();
-                                                        return "navigator.clipboard.writeText('{$record->instance_api_token}')";
-                                                    })
-                                            ),
-                                    ])
-                                    ->extraAttributes([
-                                        'x-ref' => 'pluginToken',
-                                    ]),
-
                                 Forms\Components\Section::make('Status Information')
                                     ->description('Current instance status')
                                     ->icon('heroicon-m-information-circle')
@@ -134,21 +127,40 @@ class InstanceResource extends Resource
                                         Forms\Components\Toggle::make('has_set_api_tokens')
                                             ->label('API Tokens Configured')
                                             ->disabled(),
+                                        Forms\Components\Toggle::make('ploi_ssl_enabled')
+                                            ->label('SSL Enabled')
+                                            ->disabled(),
                                     ]),
 
-                                Forms\Components\Section::make('Suspension Details')
-                                    ->description('Suspension information if applicable')
-                                    ->icon('heroicon-m-exclamation-triangle')
+                                Forms\Components\Section::make('Ploi Configuration')
+                                    ->description('Ploi server details')
+                                    ->icon('heroicon-m-server-stack')
                                     ->schema([
-                                        Forms\Components\DateTimePicker::make('suspended_at')
-                                            ->label('Suspended At')
+                                        Forms\Components\TextInput::make('ploi_server_id')
+                                            ->label('Server ID')
                                             ->disabled(),
-                                        Forms\Components\Textarea::make('suspension_reason')
-                                            ->label('Suspension Reason')
-                                            ->disabled()
-                                            ->rows(2),
-                                    ])
-                                    ->visible(fn ($record) => $record?->status === 'suspended'),
+                                        Forms\Components\TextInput::make('ploi_site_id')
+                                            ->label('Site ID')
+                                            ->disabled(),
+                                        Forms\Components\TextInput::make('ploi_database_name')
+                                            ->label('Database Name')
+                                            ->disabled(),
+                                        Forms\Components\TextInput::make('ploi_database_user')
+                                            ->label('Database User')
+                                            ->disabled(),
+                                    ]),
+
+                                Forms\Components\Section::make('API Tokens')
+                                    ->description('Authentication tokens')
+                                    ->icon('heroicon-m-key')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('plugin_api_token')
+                                            ->label('Plugin API Token')
+                                            ->disabled(),
+                                        Forms\Components\TextInput::make('instance_api_token')
+                                            ->label('Instance API Token')
+                                            ->disabled(),
+                                    ]),
                             ]),
                     ]),
             ]);

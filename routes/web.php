@@ -47,4 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/instances/{instance}/toggle-beta', [InstanceController::class, 'toggleBeta'])->name('instances.toggle-beta');
     Route::post('/instances/{instance}/mark-api-tokens-set', [InstanceController::class, 'markApiTokensAsSet'])
         ->name('instances.mark-api-tokens-set');
+    Route::put('/instances/{instance}/minecraft-config', [InstanceController::class, 'updateMinecraftConfig'])
+        ->name('instances.update-minecraft-config');
 });

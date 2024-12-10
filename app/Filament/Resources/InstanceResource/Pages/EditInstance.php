@@ -7,6 +7,8 @@ use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
 use Filament\Forms;
+use App\Services\PloiService;
+use App\Models\PloiSettings;
 
 class EditInstance extends EditRecord
 {
@@ -27,57 +29,52 @@ class EditInstance extends EditRecord
                     if (!$this->record->dns_verified) {
                         return 'Warning: DNS is not verified. Deploying will not activate the instance.';
                     }
-                    return 'Are you sure you want to deploy this instance? This will activate the instance and start the subscription period.';
+                    return 'Are you sure you want to deploy this instance?';
                 })
                 ->modalSubmitActionLabel('Yes, deploy instance')
-                ->form([
-                    Forms\Components\Placeholder::make('info')
-                        ->content('This will:')
-                        ->extraAttributes(['class' => 'text-sm text-gray-500']),
-                    Forms\Components\Placeholder::make('points')
-                        ->content(view('filament.actions.deploy-points')),
-                ])
                 ->action(function () {
-                    $this->record->update([
-                        'deployment_status' => 'completed',
-                        'last_deployment_at' => now(),
-                    ]);
-
-                    // Only activate and start subscription if requirements are met
-                    if ($this->record->is_paid && $this->record->dns_verified) {
-                        $this->record->update(['status' => 'active']);
-
-                        if (!$this->record->activeSubscription()) {
-                            $subscription = $this->record->subscriptions()->first();
-                            if ($subscription) {
-                                // Parse the duration and add the correct interval
-                                $ends_at = now();
-                                $duration = explode('_', $subscription->duration);
-                                $amount = (int) $duration[0];
-                                
-                                $ends_at = match($duration[1]) {
-                                    'month', 'months' => $ends_at->addMonths($amount),
-                                    'year', 'years' => $ends_at->addYears($amount),
-                                    default => $ends_at->addMonths($amount),
-                                };
-
-                                $subscription->update([
-                                    'starts_at' => now(),
-                                    'ends_at' => $ends_at,
-                                    'status' => 'paid'
-                                ]);
+                    try {
+                        $ploiService = new PloiService();
+                        
+                        // Set server ID if not set
+                        if (!$this->record->ploi_server_id) {
+                            $settings = PloiSettings::first();
+                            if (!$settings || !$settings->default_server_id) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Deployment Failed')
+                                    ->body('No default server configured in Ploi settings.')
+                                    ->send();
+                                return;
                             }
+                            $this->record->update(['ploi_server_id' => $settings->default_server_id]);
+                        }
+
+                        if (!$ploiService->deploy($this->record)) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Deployment Failed')
+                                ->body($this->record->ploi_deployment_error ?? 'Failed to deploy instance')
+                                ->send();
+                            return;
+                        }
+
+                        // Only activate if requirements are met
+                        if ($this->record->is_paid && $this->record->dns_verified) {
+                            $this->record->update(['status' => 'active']);
+                            // ... subscription logic ...
                         }
 
                         Notification::make()
-                            ->title('Instance Deployed and Activated')
                             ->success()
+                            ->title('Deployment Successful')
                             ->send();
-                    } else {
+
+                    } catch (\Exception $e) {
                         Notification::make()
-                            ->title('Instance Deployed')
-                            ->warning()
-                            ->body('Instance was deployed but not activated due to pending requirements.')
+                            ->danger()
+                            ->title('Deployment Failed')
+                            ->body($e->getMessage())
                             ->send();
                     }
                 }),

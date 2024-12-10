@@ -11,6 +11,8 @@ class Instance extends Model
     protected $fillable = [
         'user_id',
         'hostname',
+        'minecraft_server_host',
+        'minecraft_plugin_ip',
         'status',
         'is_paid',
         'is_beta',
@@ -23,7 +25,15 @@ class Instance extends Model
         'last_deployment_at',
         'last_backup_at',
         'suspended_at',
-        'suspension_reason'
+        'suspension_reason',
+        'ploi_server_id',
+        'ploi_site_id',
+        'ploi_database_name',
+        'ploi_database_user',
+        'ploi_database_password',
+        'ploi_ssl_enabled',
+        'ploi_deployment_status',
+        'ploi_deployment_error'
     ];
 
     protected $casts = [

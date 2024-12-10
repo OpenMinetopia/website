@@ -180,4 +180,16 @@ class InstanceController extends Controller
         return redirect()->route('instances.show', $instance)
             ->with('success', 'Renewal request submitted. Please complete the payment to activate your subscription.');
     }
+
+    public function updateMinecraftConfig(Request $request, Instance $instance)
+    {
+        $validated = $request->validate([
+            'minecraft_server_host' => ['required', 'string', 'max:255'],
+            'minecraft_plugin_ip' => ['required', 'string', 'max:255'],
+        ]);
+
+        $instance->update($validated);
+
+        return back()->with('success', 'Minecraft configuratie bijgewerkt.');
+    }
 }
