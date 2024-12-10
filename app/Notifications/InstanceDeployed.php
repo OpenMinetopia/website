@@ -21,11 +21,11 @@ class InstanceDeployed extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Instance Has Been Deployed')
-            ->greeting('Hello ' . $notifiable->name)
-            ->line('Your instance has been deployed successfully.')
+            ->subject('Je portal is bijgewerkt')
+            ->greeting('Hallo ' . $notifiable->name)
+            ->line('We hebben net jouw portaal gedeployed naar een nieuwe versie.')
             ->line('Portal URL: https://' . $this->instance->hostname)
-            ->action('View Instance', route('instances.show', $this->instance))
-            ->line('You can now access your portal using the link above.');
+            ->action('Bekijk instance', route('instances.show', $this->instance))
+            ->line('Je hoeft verder niets te doen.');
     }
-} 
+}

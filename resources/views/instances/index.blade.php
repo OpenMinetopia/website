@@ -1,18 +1,18 @@
 <x-app-layout>
     <div class="mb-8 sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Your Instances</h1>
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Jouw portals</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Manage your OpenMinetopia instances
+                Beheer jouw OpenMinetopia portals
             </p>
         </div>
         <div class="mt-4 sm:mt-0">
-            <a href="{{ route('instances.create') }}" 
+            <a href="{{ route('instances.create') }}"
                 class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                 </svg>
-                Create New Instance
+                Portal aanmaken
             </a>
         </div>
     </div>
@@ -74,7 +74,7 @@
                             <span class="text-sm text-gray-500 dark:text-gray-400">v{{ $instance->version }}</span>
                             @if($instance->activeSubscription())
                                 <span class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                    Expires {{ $instance->activeSubscription()->ends_at->format('M j, Y') }}
+                                    Verloopt {{ $instance->activeSubscription()->ends_at->format('M j, Y') }}
                                 </span>
                             @endif
                         </div>
@@ -89,14 +89,14 @@
                                         <svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        Verified
+                                        Geverifieerd
                                     </span>
                                 @else
                                     <span class="inline-flex items-center text-sm text-yellow-700 dark:text-yellow-400">
                                         <svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                         </svg>
-                                        Pending verification
+                                        Verificatie in afwachting
                                     </span>
                                 @endif
                             </dd>
@@ -110,7 +110,7 @@
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
-                                        In Progress
+                                        Mee bezig
                                     </span>
                                 </dd>
                             </div>
@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="px-4 py-4 sm:px-6 flex justify-between items-center">
-                    <a href="{{ route('instances.show', $instance) }}" 
+                    <a href="{{ route('instances.show', $instance) }}"
                         class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
                         Manage Instance
                         <svg class="ml-1.5 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -143,19 +143,19 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z" />
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No instances</h3>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating a new instance.</p>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Geen portals</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Ga aan de slag met je eerste portal.</p>
                     <div class="mt-6">
-                        <a href="{{ route('instances.create') }}" 
+                        <a href="{{ route('instances.create') }}"
                             class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                             <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                             </svg>
-                            Create Instance
+                            Portal aanmaken
                         </a>
                     </div>
                 </div>
             </div>
         @endforelse
     </div>
-</x-app-layout> 
+</x-app-layout>

@@ -45,7 +45,7 @@
                             <div class="absolute inset-0 rounded-xl transition-all duration-200 group-hover:ring-4 group-hover:ring-amber-500/30"></div>
                         </a>
 
-                        <a href="https://github.com/OpenMinetopia/portal" target="_blank" rel="noopener"
+                        <a href="https://github.com/OpenMinetopia/plugin" target="_blank" rel="noopener"
                            class="group relative inline-flex items-center justify-center px-8 py-3 text-base font-medium border-2 border-amber-500/20 hover:border-amber-500/40 text-gray-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 transform hover:-translate-y-0.5">
                                 <span class="relative flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

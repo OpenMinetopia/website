@@ -6,10 +6,10 @@
                     <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
                 </svg>
             </a>
-            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Create New Instance</h1>
+            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Nieuw portal aanmaken</h1>
         </div>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Set up your new OpenMinetopia instance
+            Stel jouw OpenMinetopia portal in
         </p>
     </div>
 
@@ -18,18 +18,18 @@
         <div class="lg:col-span-2 space-y-6">
             <form action="{{ route('instances.store') }}" method="POST" class="space-y-6" x-data="{ selectedDuration: '{{ old('duration') }}', selectedPayment: '{{ old('payment_method') }}' }">
                 @csrf
-                
+
                 <!-- Hostname Section -->
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Domain Configuration</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Domeinconfiguratie</h2>
                         <div class="space-y-4">
                             <div>
                                 <label for="hostname" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Hostname
                                 </label>
                                 <div class="mt-1 relative rounded-md shadow-sm">
-                                    <input type="text" name="hostname" id="hostname" 
+                                    <input type="text" name="hostname" id="hostname"
                                         class="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:text-white"
                                         placeholder="portal.yourdomain.com"
                                         value="{{ old('hostname') }}"
@@ -39,7 +39,7 @@
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
                                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    Choose a subdomain where your portal will be accessible
+                                    Kies een subdomein voor je portal.
                                 </p>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                 <!-- Subscription Section -->
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Subscription Plan</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Abonnement</h2>
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             @foreach($durations as $duration)
                                 <label class="relative flex cursor-pointer rounded-lg border-2 transition-colors duration-150 ease-in-out"
@@ -57,7 +57,7 @@
                                         'border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/50': selectedDuration === '{{ $duration }}',
                                         'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500': selectedDuration !== '{{ $duration }}'
                                     }">
-                                    <input type="radio" name="duration" value="{{ $duration }}" 
+                                    <input type="radio" name="duration" value="{{ $duration }}"
                                         class="sr-only"
                                         x-model="selectedDuration"
                                         required>
@@ -94,7 +94,7 @@
                 <!-- Payment Method Section -->
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Payment Method</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Betaalmethode</h2>
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             @foreach($payment_methods as $method)
                                 <label class="relative flex cursor-pointer rounded-lg border-2 transition-colors duration-150 ease-in-out"
@@ -102,7 +102,7 @@
                                         'border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/50': selectedPayment === '{{ $method }}',
                                         'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500': selectedPayment !== '{{ $method }}'
                                     }">
-                                    <input type="radio" name="payment_method" value="{{ $method }}" 
+                                    <input type="radio" name="payment_method" value="{{ $method }}"
                                         class="sr-only"
                                         x-model="selectedPayment"
                                         required>
@@ -131,7 +131,7 @@
 
                 <div class="flex justify-end">
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Create Instance
+                        Portal aanmaken
                     </button>
                 </div>
             </form>
@@ -142,7 +142,7 @@
             <!-- Quick Info -->
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                 <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Important Information</h2>
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Belangrijke informatie</h2>
                     <div class="space-y-4">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
@@ -151,9 +151,9 @@
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">Instant Setup</h3>
+                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">Betaling verificatie</h3>
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                    Your instance will be ready immediately after payment verification
+                                    Nadat jouw betaling binnen is, is je portaal binnen 24 uur te gebruiken.
                                 </p>
                             </div>
                         </div>
@@ -165,9 +165,9 @@
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">SSL Included</h3>
+                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">SSL inbegrepen</h3>
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                    Free SSL certificate for secure connections
+                                    Wij stellen een SSL-certificaat in voor je portal.
                                 </p>
                             </div>
                         </div>
@@ -179,9 +179,9 @@
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">Cancel Anytime</h3>
+                                <h3 class="text-sm font-medium text-gray-900 dark:text-white">Altijd opzegbaar</h3>
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                    No long-term commitment required
+                                    Geen contracten, geen onnozel gedoe.
                                 </p>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
             <!-- Requirements -->
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                 <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Requirements</h2>
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Vereisten</h2>
                     <ul class="space-y-3">
                         <li class="flex items-start">
                             <div class="flex-shrink-0">
@@ -201,7 +201,7 @@
                                 </svg>
                             </div>
                             <p class="ml-3 text-sm text-gray-500 dark:text-gray-400">
-                                Access to your domain's DNS settings
+                                Publiekelijk domeinnaam
                             </p>
                         </li>
                         <li class="flex items-start">
@@ -211,7 +211,7 @@
                                 </svg>
                             </div>
                             <p class="ml-3 text-sm text-gray-500 dark:text-gray-400">
-                                Valid payment method
+                                Geldige betaalmethode
                             </p>
                         </li>
                     </ul>
@@ -219,4 +219,4 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>

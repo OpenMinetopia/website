@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="mb-8 sm:flex sm:items-center sm:justify-between">
         <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Your Instances
+            Jouw portals
         </h1>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('instances.create') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Create New Instance
+                Nieuw portal aanmaken
             </a>
         </div>
     </div>
@@ -42,19 +42,19 @@
                 </div>
                 <div class="px-4 py-4 sm:px-6">
                     <a href="{{ route('instances.show', $instance) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                        Manage Instance →
+                        Beheer portaal →
                     </a>
                 </div>
             </div>
         @empty
             <div class="col-span-full bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6 text-center">
-                    <p class="text-gray-500 dark:text-gray-400">You don't have any instances yet.</p>
+                    <p class="text-gray-500 dark:text-gray-400">Je hebt nog geen portals.</p>
                     <a href="{{ route('instances.create') }}" class="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                        Create your first instance →
+                        Portal aanmaken →
                     </a>
                 </div>
             </div>
         @endforelse
     </div>
-</x-app-layout> 
+</x-app-layout>

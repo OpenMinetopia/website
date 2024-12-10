@@ -35,7 +35,7 @@
             </div>
         </div>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Created {{ $instance->created_at->format('F j, Y') }}
+            Aangemaakt op {{ $instance->created_at->format('F j, Y') }}
         </p>
     </div>
 
@@ -64,9 +64,9 @@
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-white">Complete Payment</h2>
+                            <h2 class="text-lg font-medium text-gray-900 dark:text-white">Betaling afronden</h2>
                             <span class="inline-flex items-center rounded-full bg-yellow-100 dark:bg-yellow-900/50 px-3 py-1 text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                                Payment Required
+                                Betaling vereist
                             </span>
                         </div>
 
@@ -82,21 +82,21 @@
                                         </p>
                                     </div>
                                     <div x-data="{ showPaymentDetails: false }">
-                                        <button type="button" @click="showPaymentDetails = true" 
+                                        <button type="button" @click="showPaymentDetails = true"
                                             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                                             <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                             </svg>
-                                            Complete Payment
+                                            Betaling voltooien
                                         </button>
 
                                         <!-- Payment Details Modal -->
-                                        <div x-show="showPaymentDetails" 
-                                            class="relative z-50" 
-                                            aria-labelledby="modal-title" 
-                                            role="dialog" 
+                                        <div x-show="showPaymentDetails"
+                                            class="relative z-50"
+                                            aria-labelledby="modal-title"
+                                            role="dialog"
                                             aria-modal="true">
-                                            <div x-show="showPaymentDetails" 
+                                            <div x-show="showPaymentDetails"
                                                 x-transition:enter="ease-out duration-300"
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
@@ -123,11 +123,11 @@
                                                             </div>
                                                             <div class="mt-3 text-center sm:mt-5">
                                                                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white" id="modal-title">
-                                                                    Complete Your Payment
+                                                                    Voltooi je betaling
                                                                 </h3>
                                                                 <div class="mt-2">
                                                                     <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                                        Amount due: €{{ number_format($instance->subscriptions->first()->amount, 2) }}
+                                                                        Te betalen: €{{ number_format($instance->subscriptions->first()->amount, 2) }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -136,13 +136,13 @@
                                                         <div class="mt-6 space-y-6">
                                                             <!-- Bank Transfer Details -->
                                                             <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4">
-                                                                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Bank Transfer</h4>
+                                                                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Bankoverschrijving</h4>
                                                                 <dl class="space-y-2">
                                                                     <div class="flex justify-between">
-                                                                        <dt class="text-sm text-gray-500 dark:text-gray-400">Account Number</dt>
+                                                                        <dt class="text-sm text-gray-500 dark:text-gray-400">Rekeningnummer (IBAN)</dt>
                                                                         <dd class="text-sm font-mono text-gray-900 dark:text-white">
                                                                             {{ config('instances.payment_methods.bank_transfer.account') }}
-                                                                            <button onclick="copyToClipboard('{{ config('instances.payment_methods.bank_transfer.account') }}', 'bank-copy')" 
+                                                                            <button onclick="copyToClipboard('{{ config('instances.payment_methods.bank_transfer.account') }}', 'bank-copy')"
                                                                                 class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
                                                                                 id="bank-copy">
                                                                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -152,14 +152,14 @@
                                                                         </dd>
                                                                     </div>
                                                                     <div class="flex justify-between">
-                                                                        <dt class="text-sm text-gray-500 dark:text-gray-400">Account Holder</dt>
+                                                                        <dt class="text-sm text-gray-500 dark:text-gray-400">Rekeninghouder</dt>
                                                                         <dd class="text-sm text-gray-900 dark:text-white">{{ config('instances.payment_methods.bank_transfer.name') }}</dd>
                                                                     </div>
                                                                     <div class="flex justify-between">
-                                                                        <dt class="text-sm text-gray-500 dark:text-gray-400">Reference</dt>
+                                                                        <dt class="text-sm text-gray-500 dark:text-gray-400">Referentie</dt>
                                                                         <dd class="text-sm font-mono text-gray-900 dark:text-white">
                                                                             INV-{{ $instance->id }}
-                                                                            <button onclick="copyToClipboard('INV-{{ $instance->id }}', 'ref-copy')" 
+                                                                            <button onclick="copyToClipboard('INV-{{ $instance->id }}', 'ref-copy')"
                                                                                 class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
                                                                                 id="ref-copy">
                                                                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -175,10 +175,10 @@
                                                             <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4">
                                                                 <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">PayPal</h4>
                                                                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                                    Send payment to:
+                                                                    Stuur betaling naar:
                                                                     <span class="font-mono text-gray-900 dark:text-white">
                                                                         {{ config('instances.payment_methods.paypal.email') }}
-                                                                        <button onclick="copyToClipboard('{{ config('instances.payment_methods.paypal.email') }}', 'paypal-copy')" 
+                                                                        <button onclick="copyToClipboard('{{ config('instances.payment_methods.paypal.email') }}', 'paypal-copy')"
                                                                             class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
                                                                             id="paypal-copy">
                                                                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -188,7 +188,7 @@
                                                                     </span>
                                                                 </p>
                                                                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                    Please include reference <span class="font-mono">INV-{{ $instance->id }}</span> in the payment note.
+                                                                    Geef bij de betaling referentie <span class="font-mono">INV-{{ $instance->id }}</span> op in de omschrijving.
                                                                 </p>
                                                             </div>
 
@@ -201,12 +201,12 @@
                                                                         </svg>
                                                                     </div>
                                                                     <div class="ml-3">
-                                                                        <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Important Information</h3>
+                                                                        <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Belangrijke informatie</h3>
                                                                         <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
                                                                             <ul class="list-disc space-y-1 pl-5">
-                                                                                <li>Payments are typically processed within 24 hours</li>
-                                                                                <li>You'll receive an email confirmation once payment is received</li>
-                                                                                <li>Make sure to include the correct payment reference</li>
+                                                                                <li>Betalingen worden binnen 24 uur gecontroleerd</li>
+                                                                                <li>Je ontvangt een e-mail zodra je betaling binnen is</li>
+                                                                                <li>Vergeet niet de juiste referentie bij je betaling te zetten</li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -215,15 +215,15 @@
                                                         </div>
 
                                                         <div class="mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                                            <button type="button" 
+                                                            <button type="button"
                                                                 class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2"
                                                                 @click="showPaymentDetails = false">
-                                                                I understand
+                                                                Begrepen
                                                             </button>
-                                                            <button type="button" 
+                                                            <button type="button"
                                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:col-start-1 sm:mt-0"
                                                                 @click="showPaymentDetails = false">
-                                                                Close
+                                                                Sluit
                                                             </button>
                                                         </div>
                                                     </div>
@@ -242,13 +242,13 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">DNS Configuration</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">DNS Configuratie</h2>
                         @if($dnsVerified)
                             <span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/50 px-3 py-1 text-sm font-medium text-green-800 dark:text-green-200">
                                 <svg class="-ml-1 mr-1.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
-                                Verified
+                                Geverifieerd
                             </span>
                         @endif
                     </div>
@@ -263,13 +263,13 @@
                                     </svg>
                                     <span class="font-mono text-sm text-gray-900 dark:text-white">{{ $serverIp }}</span>
                                 </div>
-                                <button onclick="copyToClipboard('{{ $serverIp }}', 'copy-ip-button')" 
+                                <button onclick="copyToClipboard('{{ $serverIp }}', 'copy-ip-button')"
                                     class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                                     id="copy-ip-button">
                                     <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                                     </svg>
-                                    <span>Copy IP</span>
+                                    <span>Kopieer IP</span>
                                 </button>
                             </div>
                         </div>
@@ -281,7 +281,7 @@
                                     <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    Verify DNS Configuration
+                                    Verifieer DNS-instelling
                                 </button>
                             </form>
                         @endif
@@ -293,7 +293,7 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Instance Status</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Portal status</h2>
                         <span @class([
                             'inline-flex items-center rounded-full px-3 py-1 text-sm font-medium',
                             'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' => $instance->status === 'active',
@@ -317,7 +317,7 @@
                     @if($instance->status === 'active')
                         <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4">
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                Your instance is active and ready to use. You can access your portal at:
+                                Je portal is actief en te bereiken via de volgende link:
                             </p>
                             <a href="https://{{ $instance->hostname }}" target="_blank" rel="noopener"
                                 class="mt-2 inline-flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">
@@ -330,33 +330,33 @@
                     @else
                         <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4">
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                Your instance will be activated once:
+                                Je portal wordt geactiveerd zodra:
                             </p>
                             <ul class="mt-2 space-y-2">
                                 <li class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                     <svg class="h-4 w-4 mr-2 {{ $instance->is_paid ? 'text-green-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $instance->is_paid ? 'M5 13l4 4L19 7' : 'M12 4v16m6-8H6' }}" />
                                     </svg>
-                                    Payment is completed
+                                    Je betaling binnen is
                                 </li>
                                 <li class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                     <svg class="h-4 w-4 mr-2 {{ $dnsVerified ? 'text-green-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $dnsVerified ? 'M5 13l4 4L19 7' : 'M12 4v16m6-8H6' }}" />
                                     </svg>
-                                    DNS is properly configured
+                                    Je DNS goed is ingestled
                                 </li>
                                 <li class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                     <svg class="h-4 w-4 mr-2 {{ $instance->deployment_status === 'completed' ? 'text-green-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $instance->deployment_status === 'completed' ? 'M5 13l4 4L19 7' : 'M12 4v16m6-8H6' }}" />
                                     </svg>
-                                    Instance setup by our team
+                                    Je portaal is opgezet door ons
                                     @if($instance->deployment_status === 'in_progress')
                                         <span class="ml-2 inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/50 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-200">
-                                            In Progress
+                                            In behandeling
                                         </span>
                                     @elseif($instance->deployment_status === 'pending')
                                         <span class="ml-2 inline-flex items-center rounded-full bg-yellow-100 dark:bg-yellow-900/50 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:text-yellow-200">
-                                            Pending
+                                            In behandeling
                                         </span>
                                     @endif
                                 </li>
@@ -372,7 +372,7 @@
                                         </div>
                                         <div class="ml-3">
                                             <p class="text-sm text-blue-800 dark:text-blue-200">
-                                                Our team has been notified and will begin setting up your instance shortly. You'll receive an email when it's ready.
+                                                Je aanvraag is binnen en we gaan snel aan de slag met het opzetten van je portal. We laten het je weten zodra het proces is afgerond.
                                             </p>
                                         </div>
                                     </div>
@@ -389,7 +389,7 @@
             <!-- Quick Actions -->
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                 <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Actions</h2>
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Snelle acties</h2>
                     <div class="space-y-3">
                         @if($instance->status === 'active')
                             <a href="https://{{ $instance->hostname }}" target="_blank" rel="noopener"
@@ -397,7 +397,7 @@
                                 <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
-                                Open Portal
+                                Portal openen
                             </a>
                         @endif
 
@@ -406,11 +406,11 @@
                             <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            Refresh Status
+                            Status verversen
                         </button>
 
-                        @if($instance->activeSubscription() && 
-                            $instance->activeSubscription()->ends_at->isFuture() && 
+                        @if($instance->activeSubscription() &&
+                            $instance->activeSubscription()->ends_at->isFuture() &&
                             $instance->activeSubscription()->ends_at->diffInDays(now()) <= 14)
                             <div x-data="{ showRenewalModal: false }">
                                 <button type="button" @click="showRenewalModal = true"
@@ -418,13 +418,13 @@
                                     <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
-                                    Renew Subscription (Expires in {{ ceil(abs($instance->activeSubscription()->ends_at->diffInDays(now()))) }} days)
+                                    Abonnement verlengen (verloopt binnen {{ ceil(abs($instance->activeSubscription()->ends_at->diffInDays(now()))) }} dagen)
                                 </button>
 
                                 <!-- Renewal Modal -->
                                 <div x-show="showRenewalModal" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <!-- Modal backdrop -->
-                                    <div x-show="showRenewalModal" 
+                                    <div x-show="showRenewalModal"
                                         x-transition:enter="ease-out duration-300"
                                         x-transition:enter-start="opacity-0"
                                         x-transition:enter-end="opacity-100"
@@ -443,15 +443,15 @@
                                                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                                                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                                                 class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                                                
+
                                                 <!-- Payment Details Content -->
                                                 <div class="mt-3 text-center sm:mt-5">
                                                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white" id="modal-title">
-                                                        Renew Your Subscription
+                                                        Abonnement verlengen
                                                     </h3>
                                                     <div class="mt-2">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Amount due: €{{ number_format($instance->subscriptions->first()->amount, 2) }}
+                                                            Te betalen: €{{ number_format($instance->subscriptions->first()->amount, 2) }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -460,13 +460,13 @@
                                                 <div class="mt-6 space-y-6">
                                                     <!-- Bank Transfer Details -->
                                                     <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4">
-                                                        <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Bank Transfer</h4>
+                                                        <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Bankoverschrijving</h4>
                                                         <dl class="space-y-2">
                                                             <div class="flex justify-between">
-                                                                <dt class="text-sm text-gray-500 dark:text-gray-400">Account Number</dt>
+                                                                <dt class="text-sm text-gray-500 dark:text-gray-400">Rekeningnummer (IBAN)</dt>
                                                                 <dd class="text-sm font-mono text-gray-900 dark:text-white">
                                                                     {{ config('instances.payment_methods.bank_transfer.account') }}
-                                                                    <button onclick="copyToClipboard('{{ config('instances.payment_methods.bank_transfer.account') }}', 'bank-copy')" 
+                                                                    <button onclick="copyToClipboard('{{ config('instances.payment_methods.bank_transfer.account') }}', 'bank-copy')"
                                                                         class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
                                                                         id="bank-copy">
                                                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -476,14 +476,14 @@
                                                                 </dd>
                                                             </div>
                                                             <div class="flex justify-between">
-                                                                <dt class="text-sm text-gray-500 dark:text-gray-400">Account Holder</dt>
+                                                                <dt class="text-sm text-gray-500 dark:text-gray-400">Rekeninghouder</dt>
                                                                 <dd class="text-sm text-gray-900 dark:text-white">{{ config('instances.payment_methods.bank_transfer.name') }}</dd>
                                                             </div>
                                                             <div class="flex justify-between">
-                                                                <dt class="text-sm text-gray-500 dark:text-gray-400">Reference</dt>
+                                                                <dt class="text-sm text-gray-500 dark:text-gray-400">Referentie</dt>
                                                                 <dd class="text-sm font-mono text-gray-900 dark:text-white">
                                                                     INV-{{ $instance->id }}
-                                                                    <button onclick="copyToClipboard('INV-{{ $instance->id }}', 'ref-copy')" 
+                                                                    <button onclick="copyToClipboard('INV-{{ $instance->id }}', 'ref-copy')"
                                                                         class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
                                                                         id="ref-copy">
                                                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -499,10 +499,10 @@
                                                     <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4">
                                                         <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">PayPal</h4>
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Send payment to:
+                                                            Stuur de betaling naar:
                                                             <span class="font-mono text-gray-900 dark:text-white">
                                                                 {{ config('instances.payment_methods.paypal.email') }}
-                                                                <button onclick="copyToClipboard('{{ config('instances.payment_methods.paypal.email') }}', 'paypal-copy')" 
+                                                                <button onclick="copyToClipboard('{{ config('instances.payment_methods.paypal.email') }}', 'paypal-copy')"
                                                                     class="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
                                                                     id="paypal-copy">
                                                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -512,7 +512,7 @@
                                                             </span>
                                                         </p>
                                                         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                                            Please include reference <span class="font-mono">INV-{{ $instance->id }}</span> in the payment note.
+                                                            Gelieve de referentie <span class="font-mono">INV-{{ $instance->id }}</span> in de omschrijving te zetten.
                                                         </p>
                                                     </div>
 
@@ -525,12 +525,12 @@
                                                                 </svg>
                                                             </div>
                                                             <div class="ml-3">
-                                                                <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Important Information</h3>
+                                                                <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Belangrijke informatie</h3>
                                                                 <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
                                                                     <ul class="list-disc space-y-1 pl-5">
-                                                                        <li>Payments are typically processed within 24 hours</li>
-                                                                        <li>You'll receive an email confirmation once payment is received</li>
-                                                                        <li>Make sure to include the correct payment reference</li>
+                                                                        <li>Het kan tot 24 uur duren voordat je betaling is verwerkt</li>
+                                                                        <li>Je krijgt een e-mail zodra je betaling is verwerkt</li>
+                                                                        <li>Vergeet niet de referentie erbij te zetten</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -539,15 +539,15 @@
                                                 </div>
 
                                                 <div class="mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                                    <button type="button" 
+                                                    <button type="button"
                                                         class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2"
                                                         @click="showRenewalModal = false">
-                                                        I understand
+                                                        Begrepen
                                                     </button>
-                                                    <button type="button" 
+                                                    <button type="button"
                                                         class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:col-start-1 sm:mt-0"
                                                         @click="showRenewalModal = false">
-                                                        Close
+                                                        Sluit
                                                     </button>
                                                 </div>
                                             </div>
@@ -564,7 +564,7 @@
             @if($instance->subscriptions->isNotEmpty())
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Subscription Details</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Jouw abonnement</h2>
                         <dl class="space-y-4">
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Plan</dt>
@@ -592,18 +592,18 @@
             <!-- Instance Settings -->
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                 <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Settings</h2>
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Instellingen</h2>
                     <div class="space-y-4">
                         <form action="{{ route('instances.toggle-beta', $instance) }}" method="POST">
                             @csrf
                             <div class="flex items-center justify-between">
                                 <div>
                                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Beta Features</label>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Get early access to new features</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Eerder toegang tot nieuwe functies</p>
                                 </div>
-                                <button type="submit" 
+                                <button type="submit"
                                     class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 {{ $instance->is_beta ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700' }}">
-                                    <span class="sr-only">Enable beta features</span>
+                                    <span class="sr-only">Schakel beta featurs in</span>
                                     <span class="pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $instance->is_beta ? 'translate-x-5' : 'translate-x-0' }}"></span>
                                 </button>
                             </div>
@@ -616,19 +616,19 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Plugin Configuration</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Plugin configuratie</h2>
                         @if($instance->has_set_api_tokens)
                             <span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/50 px-3 py-1 text-sm font-medium text-green-800 dark:text-green-200">
                                 <svg class="-ml-1 mr-1.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
-                                Configured
+                                Ingesteld
                             </span>
                         @endif
                     </div>
 
                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                        Download the <a href="https://modrinth.com/plugin/openminetopia" target="_blank" rel="noopener" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">OpenMinetopia plugin</a> and add these values to your <code class="text-xs bg-gray-100 dark:bg-gray-900 rounded px-1 py-0.5">config.yml</code>:
+                       Download de <a href="https://modrinth.com/plugin/openminetopia" target="_blank" rel="noopener" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">OpenMinetopia plugin</a> en voeg deze velden toe aan je <code class="text-xs bg-gray-100 dark:bg-gray-900 rounded px-1 py-0.5">config.yml</code>:
                     </p>
 
                     <div class="mt-4 space-y-4">
@@ -656,7 +656,7 @@
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                                     </svg>
-                                    Copy
+                                    Kopieer
                                 </button>
                             </div>
                         </div>
@@ -685,7 +685,7 @@
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                                     </svg>
-                                    Copy
+                                    Kopieer
                                 </button>
                             </div>
                         </div>
@@ -697,7 +697,7 @@
                                     <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    Mark as Configured
+                                    Markeren als afgehandeld
                                 </button>
                             </form>
                         @endif
@@ -713,17 +713,17 @@ function copyToClipboard(text, buttonId) {
     navigator.clipboard.writeText(text).then(() => {
         const button = document.getElementById(buttonId);
         const originalHTML = button.innerHTML;
-        
+
         button.innerHTML = `
             <svg class="h-4 w-4 mr-1.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
             <span>Copied!</span>
         `;
-        
+
         setTimeout(() => {
             button.innerHTML = originalHTML;
         }, 2000);
     });
 }
-</script> 
+</script>

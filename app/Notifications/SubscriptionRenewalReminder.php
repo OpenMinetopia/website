@@ -25,20 +25,20 @@ class SubscriptionRenewalReminder extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         $message = match($this->daysLeft) {
-            7 => "Your subscription will expire in 7 days",
-            2 => "Your subscription will expire in 2 days",
-            0 => "Your subscription expires today",
-            default => "Your subscription will expire soon"
+            7 => "Je abonnement verloopt binnen 7 dagen",
+            2 => "Je abonnement verloopt binnen 2 dagen",
+            0 => "Je abonnement verloopt vandaag",
+            default => "Je abonnement verloopt binnenkort"
         };
 
         return (new MailMessage)
             ->subject($message)
-            ->greeting('Hello ' . $notifiable->name)
+            ->greeting('Hallo ' . $notifiable->name)
             ->line($message . '.')
-            ->line('Instance: ' . $this->subscription->instance->hostname)
-            ->line('Expiration date: ' . $this->subscription->ends_at->format('F j, Y'))
-            ->action('Renew Now', route('instances.show', $this->subscription->instance))
-            ->line('Please note that payments can take up to 24 hours to process.')
-            ->line('If you do not renew in time, your instance will be suspended.');
+            ->line('Portal: ' . $this->subscription->instance->hostname)
+            ->line('Verloopdatum: ' . $this->subscription->ends_at->format('F j, Y'))
+            ->action('Nu verlengen', route('instances.show', $this->subscription->instance))
+            ->line('Houd er rekening mee dat betalingen tot 24 uur kunnen duren')
+            ->line('Als je niet op tijd verlengt, word je portaal gesuspend.');
     }
-} 
+}

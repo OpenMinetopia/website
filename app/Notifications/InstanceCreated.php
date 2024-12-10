@@ -21,11 +21,11 @@ class InstanceCreated extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Instance Has Been Created')
-            ->greeting('Hello ' . $notifiable->name)
-            ->line('Your instance has been created successfully.')
+            ->subject('Je portal is aangeraagd')
+            ->greeting('Hallo ' . $notifiable->name)
+            ->line('Je portal is aangevraagd.')
             ->line('Portal URL: ' . $this->instance->hostname)
-            ->action('View Instance', route('instances.show', $this->instance))
-            ->line('Please complete the payment and DNS configuration to activate your instance.');
+            ->action('Bekijk instance', route('instances.show', $this->instance))
+            ->line('Zorg dat je de betaling voldoet en je DNS/Plugin instelt.');
     }
-} 
+}

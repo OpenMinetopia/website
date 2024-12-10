@@ -21,11 +21,11 @@ class InstanceActivated extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Instance Is Now Active')
-            ->greeting('Hello ' . $notifiable->name)
-            ->line('Your instance is now active and ready to use.')
-            ->line('You can access your portal at: https://' . $this->instance->hostname)
-            ->action('View Instance', route('instances.show', $this->instance))
-            ->line('Thank you for using our service!');
+            ->subject('Jouw portal is actief')
+            ->greeting('Hallo ' . $notifiable->name)
+            ->line('Goed nieuws, jouw portal is actief en kan gebruikt worden!')
+            ->line('Je kan jouw portal bereiken via: https://' . $this->instance->hostname)
+            ->action('Bekijk instance', route('instances.show', $this->instance))
+            ->line('Vragen? Neem gerust contact met ons op!');
     }
-} 
+}

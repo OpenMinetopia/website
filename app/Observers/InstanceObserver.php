@@ -36,8 +36,8 @@ class InstanceObserver
         // Discord webhook
         Http::post(config('services.discord.webhook_url'), [
             'embeds' => [[
-                'title' => '🆕 New Instance Created',
-                'description' => "A new instance has been created.",
+                'title' => '🆕 Nieuw portal aangevraagd',
+                'description' => "Er is een nieuw portal aangevraagd. Controleer betaling en handel af",
                 'color' => hexdec('5865F2'), // Discord blue
                 'fields' => [
                     [
@@ -46,15 +46,15 @@ class InstanceObserver
                         'inline' => true
                     ],
                     [
-                        'name' => 'Created By',
+                        'name' => 'Aangevraagd door',
                         'value' => $instance->user->name,
                         'inline' => true
                     ],
                     [
-                        'name' => 'Subscription',
-                        'value' => $instance->subscriptions->first() ? 
-                            str_replace('_', ' ', ucfirst($instance->subscriptions->first()->duration)) : 
-                            'No subscription yet',
+                        'name' => 'Abonnemet',
+                        'value' => $instance->subscriptions->first() ?
+                            str_replace('_', ' ', ucfirst($instance->subscriptions->first()->duration)) :
+                            'Nog geen abonnement',
                         'inline' => true
                     ]
                 ],
@@ -73,10 +73,10 @@ class InstanceObserver
             // Notify admins via Filament Database Notification
             User::where('is_admin', true)->each(function ($admin) use ($instance) {
                 FilamentNotification::make()
-                    ->title('Instance Activated')
+                    ->title('Portal geactiveerd')
                     ->icon('heroicon-o-check-circle')
                     ->iconColor('success')
-                    ->body("Instance {$instance->hostname} has been activated")
+                    ->body("Portal {$instance->hostname} is geactiveerd")
                     ->actions([
                         \Filament\Notifications\Actions\Action::make('view')
                             ->button()
@@ -106,8 +106,8 @@ class InstanceObserver
             // Discord webhook
             Http::post(config('services.discord.webhook_url'), [
                 'embeds' => [[
-                    'title' => '⚠️ Instance Suspended',
-                    'description' => "An instance has been suspended.",
+                    'title' => '⚠️Portal is suspended',
+                    'description' => "Er is een portal suspended.",
                     'color' => hexdec('ED4245'), // Discord red
                     'fields' => [
                         [
@@ -116,12 +116,12 @@ class InstanceObserver
                             'inline' => true
                         ],
                         [
-                            'name' => 'Owner',
+                            'name' => 'Eigenaar',
                             'value' => $instance->user->name,
                             'inline' => true
                         ],
                         [
-                            'name' => 'Reason',
+                            'name' => 'Reden',
                             'value' => $instance->suspension_reason ?? 'No reason provided',
                             'inline' => false
                         ]
@@ -142,7 +142,7 @@ class InstanceObserver
                     ->title('Instance Deployed')
                     ->icon('heroicon-o-rocket-launch')
                     ->iconColor('success')
-                    ->body("Instance {$instance->hostname} has been deployed successfully")
+                    ->body("Portal {$instance->hostname} is zojuist gedeployed!")
                     ->actions([
                         \Filament\Notifications\Actions\Action::make('view')
                             ->button()
@@ -154,8 +154,8 @@ class InstanceObserver
             // Discord webhook
             Http::post(config('services.discord.webhook_url'), [
                 'embeds' => [[
-                    'title' => '🚀 Instance Deployed',
-                    'description' => "An instance has been deployed.",
+                    'title' => '🚀 Portal gedeployed',
+                    'description' => "Er is zojuist een portaal gedeployed.",
                     'color' => hexdec('57F287'), // Discord green
                     'fields' => [
                         [
@@ -164,7 +164,7 @@ class InstanceObserver
                             'inline' => true
                         ],
                         [
-                            'name' => 'Owner',
+                            'name' => 'Eigenaar',
                             'value' => $instance->user->name,
                             'inline' => true
                         ],
@@ -180,4 +180,4 @@ class InstanceObserver
             ]);
         }
     }
-} 
+}
