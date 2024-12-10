@@ -465,5 +465,150 @@ BASH;
         return $content;
     }
 
+    public function getServers()
+    {
+        try {
+            if (!$this->settings || !$this->settings->api_token) {
+                return [];
+            }
+
+            \Log::info('Fetching Ploi servers');
+
+            $response = Http::withHeaders($this->getHeaders())
+                ->get("{$this->baseUrl}/servers");
+
+            if (!$response->successful()) {
+                \Log::error('Failed to fetch servers', [
+                    'status' => $response->status(),
+                    'response' => $response->json()
+                ]);
+                throw new \Exception('Failed to fetch servers from Ploi');
+            }
+
+            \Log::info('Successfully fetched servers', [
+                'count' => count($response->json()['data'] ?? [])
+            ]);
+
+            return $response->json()['data'] ?? [];
+        } catch (\Exception $e) {
+            \Log::error('Error fetching servers', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return [];
+        }
+    }
+
+    protected function createSite(Instance $instance)
+    {
+        try {
+            \Log::info('Creating new site', ['instance' => $instance->hostname]);
+
+            $response = Http::withHeaders($this->getHeaders())
+                ->post("{$this->baseUrl}/servers/{$instance->ploi_server_id}/sites", [
+                    'domain' => $instance->hostname,
+                    'root_domain' => $instance->hostname,
+                    'web_directory' => '/public',
+                    'php_version' => '8.4',
+                    'systemuser' => 'ploi'
+                ]);
+
+            if (!$response->successful()) {
+                \Log::error('Failed to create site', [
+                    'response' => $response->json(),
+                    'status' => $response->status(),
+                    'domain' => $instance->hostname
+                ]);
+                throw new \Exception($response->json()['message'] ?? 'Failed to create site');
+            }
+
+            $siteData = $response->json()['data'];
+            
+            // Update instance with site ID
+            $instance->update([
+                'ploi_site_id' => $siteData['id']
+            ]);
+
+            \Log::info('Site created successfully', [
+                'site_id' => $siteData['id'],
+                'domain' => $instance->hostname
+            ]);
+
+            // Wait a moment for site to be ready
+            sleep(2);
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('Site creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'instance' => $instance->hostname
+            ]);
+
+            $instance->update([
+                'ploi_deployment_status' => 'failed',
+                'ploi_deployment_error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
+
+    protected function createDatabase(Instance $instance)
+    {
+        try {
+            \Log::info('Creating database', ['instance' => $instance->hostname]);
+
+            // Generate database name and credentials
+            $dbName = Str::slug($instance->hostname, '_');
+            $dbUser = Str::slug($instance->hostname . '_user', '_');
+            $dbPass = Str::random(32); // Generate secure password
+
+            $response = Http::withHeaders($this->getHeaders())
+                ->post("{$this->baseUrl}/servers/{$instance->ploi_server_id}/databases", [
+                    'name' => $dbName,
+                    'user' => $dbUser,
+                    'password' => $dbPass
+                ]);
+
+            if (!$response->successful()) {
+                \Log::error('Failed to create database', [
+                    'response' => $response->json(),
+                    'status' => $response->status(),
+                    'database' => $dbName
+                ]);
+                throw new \Exception($response->json()['message'] ?? 'Failed to create database');
+            }
+
+            // Store database credentials in instance
+            $instance->update([
+                'ploi_database_name' => $dbName,
+                'ploi_database_user' => $dbUser,
+                'ploi_database_password' => $dbPass
+            ]);
+
+            \Log::info('Database created successfully', [
+                'database' => $dbName,
+                'instance' => $instance->hostname
+            ]);
+
+            // Wait a moment for database to be ready
+            sleep(2);
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('Database creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'instance' => $instance->hostname
+            ]);
+
+            $instance->update([
+                'ploi_deployment_status' => 'failed',
+                'ploi_deployment_error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
+
     // ... other methods remain the same but with improved error handling
 }
