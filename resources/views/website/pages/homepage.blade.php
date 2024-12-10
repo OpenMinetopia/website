@@ -51,11 +51,11 @@
                     <div class="grid grid-cols-3 gap-6 pt-8">
                         <div class="text-center">
                             <div class="text-3xl font-bold text-amber-600 dark:text-amber-400">{{ $stats['download_count'] }}+</div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Actieve Servers</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Plugin downloads</div>
                         </div>
                         <div class="text-center">
                             <div class="text-3xl font-bold text-amber-600 dark:text-amber-400">{{ $stats['discord_members'] }}</div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Discord Leden</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Discord leden</div>
                         </div>
                         <div class="text-center">
                             <div class="text-3xl font-bold text-amber-600 dark:text-amber-400">100%</div>
@@ -100,7 +100,7 @@
     <section class="relative py-24 bg-gradient-to-b from-gray-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-800/80 dark:to-gray-900">
         <!-- Add decorative top border -->
         <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent"></div>
-        
+
         <!-- Add subtle wave pattern -->
         <div class="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-[0.02]"></div>
 
