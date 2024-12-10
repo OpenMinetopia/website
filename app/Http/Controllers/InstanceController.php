@@ -33,11 +33,15 @@ class InstanceController extends Controller
         $validated = $request->validate([
             'hostname' => ['required', 'string', 'max:255', Rule::unique('instances')],
             'duration' => ['required', Rule::in(array_keys(config('instances.pricing')))],
-            'payment_method' => ['required', Rule::in(array_keys(config('instances.payment_methods')))]
+            'payment_method' => ['required', Rule::in(array_keys(config('instances.payment_methods')))],
+            'minecraft_server_host' => ['required', 'string', 'max:255'],
+            'minecraft_plugin_ip' => ['required', 'string', 'max:255'],
         ]);
 
         $instance = auth()->user()->instances()->create([
             'hostname' => $validated['hostname'],
+            'minecraft_server_host' => $validated['minecraft_server_host'],
+            'minecraft_plugin_ip' => $validated['minecraft_plugin_ip'],
             'status' => 'pending',
             'deployment_status' => 'uncompleted',
         ]);
@@ -191,5 +195,22 @@ class InstanceController extends Controller
         $instance->update($validated);
 
         return back()->with('success', 'Minecraft configuratie bijgewerkt.');
+    }
+
+    public function updateHostname(Request $request, Instance $instance)
+    {
+        if ($instance->status !== 'pending') {
+            return back()->with('hostname_error', true);
+        }
+
+        $validated = $request->validate([
+            'hostname' => ['required', 'string', 'max:255', Rule::unique('instances')->ignore($instance)],
+        ]);
+
+        $instance->update([
+            'hostname' => $validated['hostname']
+        ]);
+
+        return back()->with('success', 'Hostname bijgewerkt.');
     }
 }

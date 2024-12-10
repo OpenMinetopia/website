@@ -7,31 +7,70 @@
                     <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
                 </svg>
             </a>
-            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white font-mono">{{ $instance->hostname }}</h1>
             <div class="flex items-center gap-2">
-                <span @class([
-                    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                    'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' => $instance->status === 'active',
-                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200' => $instance->status === 'pending',
-                    'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200' => $instance->status === 'suspended',
-                    'bg-gray-100 text-gray-800 dark:bg-gray-900/50 dark:text-gray-200' => $instance->status === 'removed'
-                ])>
-                    <svg @class([
-                        'mr-1.5 h-3 w-3',
-                        'text-green-400' => $instance->status === 'active',
-                        'text-yellow-400' => $instance->status === 'pending',
-                        'text-red-400' => $instance->status === 'suspended',
-                        'text-gray-400' => $instance->status === 'removed'
-                    ]) fill="currentColor" viewBox="0 0 8 8">
-                        <circle cx="4" cy="4" r="3" />
-                    </svg>
-                    {{ ucfirst($instance->status) }}
-                </span>
-                @if($instance->is_beta)
-                    <span class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/50 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:text-purple-200">
-                        Beta
+                <div class="group relative">
+                    @if($instance->status === 'pending')
+                        <form action="{{ route('instances.update-hostname', $instance) }}" 
+                              method="POST" 
+                              class="flex items-center gap-2"
+                              x-data="{ editing: false, hostname: '{{ $instance->hostname }}' }">
+                            @csrf
+                            @method('PUT')
+                            <h1 x-show="!editing" 
+                                @click="editing = true" 
+                                class="text-2xl font-semibold text-gray-900 dark:text-white font-mono cursor-pointer hover:text-indigo-600 group-hover:text-indigo-600">
+                                {{ $instance->hostname }}
+                                <span class="ml-2 hidden group-hover:inline-block text-sm text-indigo-600">(klik om te bewerken)</span>
+                            </h1>
+                            <div x-show="editing" class="flex items-center gap-2">
+                                <input type="text" 
+                                       name="hostname" 
+                                       x-model="hostname"
+                                       class="text-2xl font-semibold text-gray-900 dark:text-white font-mono border-b-2 border-indigo-500 focus:outline-none focus:border-indigo-600 bg-transparent px-1">
+                                <button type="submit" class="text-indigo-600 hover:text-indigo-700">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </button>
+                                <button type="button" @click="editing = false" class="text-gray-500 hover:text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    @else
+                        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white font-mono group-hover:text-gray-700">
+                            {{ $instance->hostname }}
+                            <span class="ml-2 hidden group-hover:inline-block text-sm text-gray-500">(neem contact op met support om te wijzigen)</span>
+                        </h1>
+                    @endif
+                </div>
+                <div class="flex items-center gap-2">
+                    <span @class([
+                        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+                        'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' => $instance->status === 'active',
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200' => $instance->status === 'pending',
+                        'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200' => $instance->status === 'suspended',
+                        'bg-gray-100 text-gray-800 dark:bg-gray-900/50 dark:text-gray-200' => $instance->status === 'removed'
+                    ])>
+                        <svg @class([
+                            'mr-1.5 h-3 w-3',
+                            'text-green-400' => $instance->status === 'active',
+                            'text-yellow-400' => $instance->status === 'pending',
+                            'text-red-400' => $instance->status === 'suspended',
+                            'text-gray-400' => $instance->status === 'removed'
+                        ]) fill="currentColor" viewBox="0 0 8 8">
+                            <circle cx="4" cy="4" r="3" />
+                        </svg>
+                        {{ ucfirst($instance->status) }}
                     </span>
-                @endif
+                    @if($instance->is_beta)
+                        <span class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/50 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:text-purple-200">
+                            Beta
+                        </span>
+                    @endif
+                </div>
             </div>
         </div>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -480,13 +519,19 @@
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-medium text-gray-900 dark:text-white">Minecraft configuratie</h2>
-                        <button type="button" @click="showServerConfig = true"
-                            class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                            Bewerken
-                        </button>
+                        @if($instance->status === 'pending')
+                            <button type="button" @click="showServerConfig = true"
+                                class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Bewerken
+                            </button>
+                        @else
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                Neem contact op met support om deze instellingen te wijzigen
+                            </span>
+                        @endif
                     </div>
 
                     <div class="rounded-lg bg-gray-50 dark:bg-gray-900 p-4 space-y-3">
@@ -501,92 +546,94 @@
                     </div>
 
                     <!-- Server Config Modal -->
-                    <div x-show="showServerConfig"
-                        class="relative z-50"
-                        aria-labelledby="modal-title"
-                        role="dialog"
-                        aria-modal="true">
+                    @if($instance->status === 'pending')
                         <div x-show="showServerConfig"
-                            x-transition:enter="ease-out duration-300"
-                            x-transition:enter-start="opacity-0"
-                            x-transition:enter-end="opacity-100"
-                            x-transition:leave="ease-in duration-200"
-                            x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
-                            class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity"></div>
+                            class="relative z-50"
+                            aria-labelledby="modal-title"
+                            role="dialog"
+                            aria-modal="true">
+                            <div x-show="showServerConfig"
+                                x-transition:enter="ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity"></div>
 
-                        <div class="fixed inset-0 z-50 overflow-y-auto">
-                            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                <div x-show="showServerConfig"
-                                    x-transition:enter="ease-out duration-300"
-                                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                    x-transition:leave="ease-in duration-200"
-                                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                    class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                                    
-                                    <form action="{{ route('instances.update-minecraft-config', $instance) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="space-y-6">
-                                            <div class="sm:flex sm:items-center">
-                                                <div class="w-full">
-                                                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">
-                                                        Minecraft configuratie bewerken
-                                                    </h3>
-                                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                                        Pas de server host en plugin API adres aan.
+                            <div class="fixed inset-0 z-50 overflow-y-auto">
+                                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                                    <div x-show="showServerConfig"
+                                        x-transition:enter="ease-out duration-300"
+                                        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                        x-transition:leave="ease-in duration-200"
+                                        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                                        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                        class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                                        
+                                        <form action="{{ route('instances.update-minecraft-config', $instance) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="space-y-6">
+                                                <div class="sm:flex sm:items-center">
+                                                    <div class="w-full">
+                                                        <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+                                                            Minecraft configuratie bewerken
+                                                        </h3>
+                                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                                            Pas de server host en plugin API adres aan.
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="minecraft_server_host" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                        Server Host
+                                                    </label>
+                                                    <div class="mt-2">
+                                                        <input type="text" name="minecraft_server_host" id="minecraft_server_host"
+                                                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white px-4 py-3 text-base"
+                                                            value="{{ $instance->minecraft_server_host }}"
+                                                            placeholder="play.openminetopia.nl">
+                                                    </div>
+                                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                                        De hostname waarop je Minecraft server draait.
                                                     </p>
                                                 </div>
-                                            </div>
-
-                                            <div>
-                                                <label for="minecraft_server_host" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                    Server Host
-                                                </label>
-                                                <div class="mt-2">
-                                                    <input type="text" name="minecraft_server_host" id="minecraft_server_host"
-                                                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white px-4 py-3 text-base"
-                                                        value="{{ $instance->minecraft_server_host }}"
-                                                        placeholder="play.openminetopia.nl">
+                                                <div>
+                                                    <label for="minecraft_plugin_ip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                        Plugin API Adres
+                                                    </label>
+                                                    <div class="mt-2">
+                                                        <input type="text" name="minecraft_plugin_ip" id="minecraft_plugin_ip"
+                                                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white px-4 py-3 text-base"
+                                                            value="{{ $instance->minecraft_plugin_ip }}"
+                                                            placeholder="127.0.0.1:25570">
+                                                    </div>
+                                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                                        Het IP-adres en poort waar de plugin API op draait.
+                                                    </p>
                                                 </div>
-                                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                                    De hostname waarop je Minecraft server draait.
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <label for="minecraft_plugin_ip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                    Plugin API Adres
-                                                </label>
-                                                <div class="mt-2">
-                                                    <input type="text" name="minecraft_plugin_ip" id="minecraft_plugin_ip"
-                                                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white px-4 py-3 text-base"
-                                                        value="{{ $instance->minecraft_plugin_ip }}"
-                                                        placeholder="127.0.0.1:25570">
-                                                </div>
-                                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                                    Het IP-adres en poort waar de plugin API op draait.
-                                                </p>
-                                            </div>
 
-                                            <div class="mt-8 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                                <button type="submit"
-                                                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2">
-                                                    Opslaan
-                                                </button>
-                                                <button type="button"
-                                                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-4 py-2.5 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:col-start-1 sm:mt-0"
-                                                    @click="showServerConfig = false">
-                                                    Annuleren
-                                                </button>
+                                                <div class="mt-8 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                                                    <button type="submit"
+                                                        class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2">
+                                                        Opslaan
+                                                    </button>
+                                                    <button type="button"
+                                                        class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-4 py-2.5 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:col-start-1 sm:mt-0"
+                                                        @click="showServerConfig = false">
+                                                        Annuleren
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>

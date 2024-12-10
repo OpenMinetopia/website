@@ -49,4 +49,6 @@ Route::middleware('auth')->group(function () {
         ->name('instances.mark-api-tokens-set');
     Route::put('/instances/{instance}/minecraft-config', [InstanceController::class, 'updateMinecraftConfig'])
         ->name('instances.update-minecraft-config');
+    Route::put('/instances/{instance}/hostname', [InstanceController::class, 'updateHostname'])
+        ->name('instances.update-hostname');
 });
