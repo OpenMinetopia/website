@@ -10,6 +10,15 @@ class InstancePolicy
 {
     use HandlesAuthorization;
 
+    public function before(User $user, $ability): ?bool
+    {
+        if ($user->is_admin) {
+            return true;
+        }
+
+        return null;
+    }
+
     public function view(User $user, Instance $instance): bool
     {
         return $user->id === $instance->user_id;
@@ -24,4 +33,4 @@ class InstancePolicy
     {
         return $user->id === $instance->user_id;
     }
-} 
+}
