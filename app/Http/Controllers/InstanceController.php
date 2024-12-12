@@ -7,6 +7,10 @@ use App\Services\DnsService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\InstanceCreated;
+use App\Services\PloiService;
+use App\Notifications\InstanceActivated;
+use Illuminate\Support\Facades\DB;
 
 class InstanceController extends Controller
 {
@@ -38,38 +42,39 @@ class InstanceController extends Controller
             'minecraft_plugin_ip' => ['required', 'string', 'max:255'],
         ]);
 
-        $instance = auth()->user()->instances()->create([
-            'hostname' => $validated['hostname'],
-            'minecraft_server_host' => $validated['minecraft_server_host'],
-            'minecraft_plugin_ip' => $validated['minecraft_plugin_ip'],
-            'status' => 'pending',
-            'deployment_status' => 'uncompleted',
-        ]);
+        $instance = DB::transaction(function() use ($validated) {
+            // Create instance first
+            $instance = auth()->user()->instances()->create([
+                'hostname' => $validated['hostname'],
+                'minecraft_server_host' => $validated['minecraft_server_host'],
+                'minecraft_plugin_ip' => $validated['minecraft_plugin_ip'],
+                'status' => 'pending',
+                'deployment_status' => 'uncompleted'
+            ]);
 
-        // Generate API tokens
-        $instance->generateApiTokens();
+            // Generate API tokens
+            $instance->generateApiTokens();
 
-        // Create subscription
-        $amount = config('instances.pricing')[$validated['duration']];
-        $starts_at = now();
-        $ends_at = match($validated['duration']) {
-            '1_month' => $starts_at->addMonth(),
-            '3_months' => $starts_at->addMonths(3),
-            '6_months' => $starts_at->addMonths(6),
-            '12_months' => $starts_at->addYear(),
-        };
+            // Create trial subscription
+            $instance->subscriptions()->create([
+                'starts_at' => now(),
+                'ends_at' => now()->addDays(7),
+                'duration' => $validated['duration'],
+                'amount' => config('instances.pricing')[$validated['duration']],
+                'payment_method' => $validated['payment_method'],
+                'status' => 'pending',
+                'is_trial' => true
+            ]);
 
-        $instance->subscriptions()->create([
-            'starts_at' => $starts_at,
-            'ends_at' => $ends_at,
-            'duration' => $validated['duration'],
-            'amount' => $amount,
-            'payment_method' => $validated['payment_method'],
-            'status' => 'pending'
-        ]);
+            // Send welcome notification only once, after everything is created
+            $instance->refresh(); // Ensure we have fresh data
+            $instance->user->notify((new InstanceCreated($instance))->onQueue('notifications'));
+
+            return $instance;
+        });
 
         return redirect()->route('instances.show', $instance)
-            ->with('success', 'Instance created successfully. Please complete the payment and DNS setup.');
+            ->with('success', 'Je proefperiode is aangevraagd! Stel de DNS en plugin configuratie in om je portal te activeren.');
     }
 
     public function show(Instance $instance)
@@ -212,5 +217,25 @@ class InstanceController extends Controller
         ]);
 
         return back()->with('success', 'Hostname bijgewerkt.');
+    }
+
+    public function convertTrial(Instance $instance)
+    {
+        if (!Gate::allows('update', $instance)) {
+            abort(403);
+        }
+
+        $subscription = $instance->subscriptions->first();
+        
+        if (!$subscription->is_trial || $subscription->trial_converted) {
+            return back()->with('error', 'Deze actie is niet mogelijk voor dit abonnement.');
+        }
+
+        $subscription->update([
+            'trial_converted' => true,
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Bedankt voor je aanvraag! Zodra je betaling binnen is (dit kan tot 24 uur duren), wordt je abonnement geactiveerd.');
     }
 }

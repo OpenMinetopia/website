@@ -10,6 +10,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('subscriptions:check-renewals')->daily();
+        $schedule->command('check:trials')->daily();
     }
 
     protected function commands()

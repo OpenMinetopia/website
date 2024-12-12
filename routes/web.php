@@ -51,4 +51,6 @@ Route::middleware('auth')->group(function () {
         ->name('instances.update-minecraft-config');
     Route::put('/instances/{instance}/hostname', [InstanceController::class, 'updateHostname'])
         ->name('instances.update-hostname');
+    Route::post('/instances/{instance}/convert-trial', [InstanceController::class, 'convertTrial'])
+        ->name('instances.convert-trial');
 });

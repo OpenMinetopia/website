@@ -15,30 +15,12 @@ class InstanceObserver
 {
     public function created(Instance $instance)
     {
-        // Notify user
-        $instance->user->notify(new InstanceCreated($instance));
-
-        // Notify admins via Filament Database Notification
-        User::where('is_admin', true)->each(function ($admin) use ($instance) {
-            FilamentNotification::make()
-                ->title('New Instance Created')
-                ->icon('heroicon-o-server')
-                ->iconColor('info')
-                ->body("A new instance ({$instance->hostname}) was created by {$instance->user->name}")
-                ->actions([
-                    \Filament\Notifications\Actions\Action::make('view')
-                        ->button()
-                        ->url(route('filament.admin.resources.instances.edit', $instance))
-                ])
-                ->sendToDatabase($admin);
-        });
-
-        // Discord webhook
+        // Only send Discord webhook, remove the notification
         Http::post(config('services.discord.webhook_url'), [
             'embeds' => [[
                 'title' => '🆕 Nieuw portal aangevraagd',
                 'description' => "Er is een nieuw portal aangevraagd. Controleer betaling en handel af",
-                'color' => hexdec('5865F2'), // Discord blue
+                'color' => hexdec('5865F2'),
                 'fields' => [
                     [
                         'name' => 'Portal URL',

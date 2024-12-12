@@ -87,9 +87,11 @@ class PloiService
                 throw new \Exception('Failed to trigger deployment');
             }
 
+            // Update instance status to show deployment is complete and instance is active
             $instance->update([
                 'ploi_deployment_status' => 'completed',
                 'deployment_status' => 'completed',
+                'status' => 'active',  // Set instance to active
                 'last_deployment_at' => now()
             ]);
 
@@ -558,10 +560,15 @@ BASH;
         try {
             \Log::info('Creating database', ['instance' => $instance->hostname]);
 
-            // Generate database name and credentials
-            $dbName = Str::slug($instance->hostname, '_');
-            $dbUser = Str::slug($instance->hostname . '_user', '_');
-            $dbPass = Str::random(32); // Generate secure password
+            // Generate unique database name and credentials
+            $uniqueId = $instance->id . '_' . uniqid();
+            $dbName = Str::slug($instance->hostname . '_' . $uniqueId, '_');
+            $dbUser = Str::slug($instance->hostname . '_user_' . $uniqueId, '_');
+            $dbPass = Str::random(32);
+
+            // Ensure names aren't too long for MySQL
+            $dbName = substr($dbName, 0, 32);
+            $dbUser = substr($dbUser, 0, 32);
 
             $response = Http::withHeaders($this->getHeaders())
                 ->post("{$this->baseUrl}/servers/{$instance->ploi_server_id}/databases", [

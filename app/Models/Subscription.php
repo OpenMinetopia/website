@@ -20,12 +20,20 @@ class Subscription extends Model
         'renewal_2_days_sent',
         'renewal_today_sent',
         'renewed_at',
-        'renewal_status'
+        'renewal_status',
+        'is_trial',
+        'trial_converted',
+        'trial_expiring_sent',
+        'trial_expired_sent'
     ];
 
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
+        'is_trial' => 'boolean',
+        'trial_converted' => 'boolean',
+        'trial_expiring_sent' => 'boolean',
+        'trial_expired_sent' => 'boolean'
     ];
 
     public function instance(): BelongsTo

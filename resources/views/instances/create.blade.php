@@ -13,6 +13,22 @@
         </p>
     </div>
 
+    <div class="mb-6 rounded-lg bg-indigo-50 dark:bg-indigo-900/50 p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-indigo-800 dark:text-indigo-200">7 dagen gratis uitproberen</h3>
+                <div class="mt-2 text-sm text-indigo-700 dark:text-indigo-300">
+                    <p>Je krijgt automatisch 7 dagen gratis toegang om het platform uit te proberen. Daarna kun je je proefperiode omzetten naar een betaald abonnement.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <!-- Main Form Column -->
         <div class="lg:col-span-2 space-y-6">
@@ -49,7 +65,7 @@
                 <!-- Subscription Section -->
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Abonnement</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Kies je abonnement voor na je proefperiode</h2>
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             @foreach($durations as $duration)
                                 <label class="relative flex cursor-pointer rounded-lg border-2 transition-colors duration-150 ease-in-out"

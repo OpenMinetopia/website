@@ -21,11 +21,12 @@ class InstanceCreated extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Je portal is aangeraagd')
+            ->subject('Je proefperiode is aangevraagd')
             ->greeting('Hallo ' . $notifiable->name)
-            ->line('Je portal is aangevraagd.')
+            ->line('Je portal is aangevraagd met een gratis proefperiode van 7 dagen.')
             ->line('Portal URL: ' . $this->instance->hostname)
             ->action('Bekijk instance', route('instances.show', $this->instance))
-            ->line('Zorg dat je de betaling voldoet en je DNS/Plugin instelt.');
+            ->line('We gaan direct aan de slag met het opzetten van je portal.')
+            ->line('Zorg dat je de DNS/Plugin correct instelt zodat we je portal kunnen activeren.');
     }
 }
