@@ -196,6 +196,7 @@ php artisan cache:clear
 php artisan config:clear
 php artisan view:clear
 php artisan route:clear
+php artisan storage:link
 
 # Restart queue workers
 php artisan queue:restart
@@ -337,6 +338,7 @@ BASH;
                 'APP_DEBUG' => 'false',
                 'APP_URL' => "https://{$instance->hostname}",
                 'APP_KEY' => $envArray['APP_KEY'],
+                'APP_TIMEZONE' => 'Europe/Amsterdam',
 
                 // Database - using IP instead of localhost
                 'DB_CONNECTION' => 'mysql',
