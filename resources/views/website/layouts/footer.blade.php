@@ -48,7 +48,7 @@
                 </h3>
                 <ul class="mt-4 space-y-3">
                     <li>
-                        <a href="https://discord.gg/openminetopia" target="_blank" rel="noopener" class="text-sm text-gray-600 hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400 transition-colors">
+                        <a href="https://discord.gg/xe9hqRFBcb" target="_blank" rel="noopener" class="text-sm text-gray-600 hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400 transition-colors">
                             Discord Server
                         </a>
                     </li>
