@@ -246,14 +246,14 @@
                                 </span>
                             @endif
                         </div>
-                        <svg class="h-5 w-5 transform transition-transform duration-200" 
+                        <svg class="h-5 w-5 transform transition-transform duration-200"
                             :class="{ 'rotate-180': activeSection === 'dns' }"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    
-                    <div x-show="activeSection === 'dns'" 
+
+                    <div x-show="activeSection === 'dns'"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 transform -translate-y-2"
                         x-transition:enter-end="opacity-100 transform translate-y-0"
@@ -314,13 +314,13 @@
                                 </span>
                             @endif
                         </div>
-                        <svg class="h-5 w-5 transform transition-transform duration-200" 
+                        <svg class="h-5 w-5 transform transition-transform duration-200"
                             :class="{ 'rotate-180': activeSection === 'plugin' }"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    
+
                     <div x-show="activeSection === 'plugin'"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 transform -translate-y-2"
@@ -332,7 +332,7 @@
 
                         <div class="mt-4 space-y-4">
                             <div x-data="{ shown: false }">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PLUGIN_API_TOKEN</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">rest-api.api-key</label>
                                 <div class="mt-1 flex rounded-md shadow-sm">
                                     <div class="relative flex flex-grow items-stretch focus-within:z-10">
                                         <input type="text" :type="shown ? 'text' : 'password'" value="{{ $instance->plugin_api_token }}" readonly
@@ -361,7 +361,7 @@
                             </div>
 
                             <div x-data="{ shown: false }">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">INSTANCE_API_TOKEN</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">portal.token</label>
                                 <div class="mt-1 flex rounded-md shadow-sm">
                                     <div class="relative flex flex-grow items-stretch focus-within:z-10">
                                         <input type="text" :type="shown ? 'text' : 'password'" value="{{ $instance->instance_api_token }}" readonly
@@ -416,19 +416,19 @@
                                 </span>
                             @endif
                         </div>
-                        <svg class="h-5 w-5 transform transition-transform duration-200" 
+                        <svg class="h-5 w-5 transform transition-transform duration-200"
                             :class="{ 'rotate-180': activeSection === 'subscription' }"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    
+
                     <div x-show="activeSection === 'subscription'"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 transform -translate-y-2"
                         x-transition:enter-end="opacity-100 transform translate-y-0"
                         class="px-6 pb-6">
-                        
+
                         @if($instance->subscriptions->isNotEmpty())
                             <div class="space-y-6">
                                 <!-- Current Subscription -->
