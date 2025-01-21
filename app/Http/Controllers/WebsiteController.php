@@ -37,9 +37,7 @@ class WebsiteController extends Controller
 
     public function download()
     {
-        return view('website.pages.download', [
-            'stats' => $this->getStats(),
-        ]);
+        return redirect("https://modrinth.com/plugin/openminetopia");
     }
 
     public function host()
@@ -48,4 +46,4 @@ class WebsiteController extends Controller
             'stats' => $this->getStats(),
         ]);
     }
-} 
+}
