@@ -191,6 +191,68 @@
                     </div>
                 </div>
 
+                <!-- Discount Code Section -->
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
+                    <div class="p-6" 
+                        x-data="discountHandler()"
+                        x-init="$watch('selectedDuration', value => updatePrice(value))">
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Kortingscode</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="discount_code" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Heb je een kortingscode?
+                                </label>
+                                <div class="mt-1 flex rounded-md shadow-sm">
+                                    <input type="text" 
+                                        name="discount_code" 
+                                        id="discount_code"
+                                        x-model="discountCode"
+                                        class="appearance-none block flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-l-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                                        placeholder="Vul je code in">
+                                    <button type="button"
+                                        @click="checkDiscount()"
+                                        :disabled="!discountCode || loading"
+                                        :class="{
+                                            'cursor-not-allowed opacity-50': !discountCode || loading,
+                                            'hover:bg-indigo-700 dark:hover:bg-indigo-600': discountCode && !loading
+                                        }"
+                                        class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-indigo-600 dark:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <span x-show="!loading">Controleer</span>
+                                        <svg x-show="loading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Message display -->
+                                <div x-show="message" 
+                                    x-transition
+                                    :class="{
+                                        'mt-2 text-sm': true,
+                                        'text-green-600 dark:text-green-400': messageType === 'success',
+                                        'text-red-600 dark:text-red-400': messageType === 'error'
+                                    }"
+                                    x-text="message">
+                                </div>
+
+                                <!-- Price display -->
+                                <div class="mt-4 flex items-baseline text-lg">
+                                    <template x-if="discountAmount > 0">
+                                        <span class="line-through text-gray-500 dark:text-gray-400 mr-2">
+                                            €<span x-text="originalPrice.toFixed(2)"></span>
+                                        </span>
+                                    </template>
+                                    <span class="font-semibold text-gray-900 dark:text-white">
+                                        €<span x-text="finalPrice.toFixed(2)"></span>
+                                    </span>
+                                    <span class="ml-1 text-sm text-gray-500 dark:text-gray-400" x-text="getDurationText()"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-end">
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Portal aanmaken
@@ -282,3 +344,62 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+function discountHandler() {
+    return {
+        discountCode: '',
+        loading: false,
+        message: '',
+        messageType: '',
+        originalPrice: {{ config('instances.pricing.1_month') }},
+        discountAmount: 0,
+        finalPrice: {{ config('instances.pricing.1_month') }},
+        
+        getDurationText() {
+            const duration = this.selectedDuration;
+            const months = duration.split('_')[0];
+            return `voor ${months} ${months === '1' ? 'maand' : 'maanden'}`;
+        },
+
+        updatePrice(duration) {
+            const prices = @json(config('instances.pricing'));
+            this.originalPrice = prices[duration];
+            this.finalPrice = this.originalPrice - this.discountAmount;
+            
+            // If there's an active discount code, recheck it with new price
+            if (this.discountCode && this.discountAmount > 0) {
+                this.checkDiscount();
+            }
+        },
+
+        async checkDiscount() {
+            if (!this.discountCode) return;
+            
+            this.loading = true;
+            try {
+                const response = await fetch(`/api/check-discount?code=${this.discountCode}&amount=${this.originalPrice}&duration=${this.selectedDuration}`);
+                const data = await response.json();
+                
+                if (data.valid) {
+                    this.discountAmount = data.discount;
+                    this.finalPrice = this.originalPrice - data.discount;
+                    this.message = data.message;
+                    this.messageType = 'success';
+                } else {
+                    this.discountAmount = 0;
+                    this.finalPrice = this.originalPrice;
+                    this.message = data.message;
+                    this.messageType = 'error';
+                }
+            } catch (error) {
+                this.message = 'Er ging iets mis bij het controleren van de code';
+                this.messageType = 'error';
+                this.discountAmount = 0;
+                this.finalPrice = this.originalPrice;
+            }
+            this.loading = false;
+        }
+    }
+}
+</script>

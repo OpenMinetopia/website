@@ -66,4 +66,9 @@ class Instance extends Model
             'instance_api_token' => 'ist_' . bin2hex(random_bytes(32))
         ]);
     }
+
+    public function discountCode(): BelongsTo
+    {
+        return $this->belongsTo(DiscountCode::class);
+    }
 }

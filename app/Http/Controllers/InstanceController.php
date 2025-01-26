@@ -11,6 +11,7 @@ use App\Notifications\InstanceCreated;
 use App\Services\PloiService;
 use App\Notifications\InstanceActivated;
 use Illuminate\Support\Facades\DB;
+use App\Models\DiscountCode;
 
 class InstanceController extends Controller
 {
@@ -40,34 +41,59 @@ class InstanceController extends Controller
             'payment_method' => ['required', Rule::in(array_keys(config('instances.payment_methods')))],
             'minecraft_server_host' => ['required', 'string', 'max:255'],
             'minecraft_plugin_ip' => ['required', 'string', 'max:255'],
+            'discount_code' => ['nullable', 'string', 'exists:discount_codes,code'],
         ]);
 
-        $instance = DB::transaction(function() use ($validated) {
-            // Create instance first
+        $instance = DB::transaction(function() use ($validated, $request) {
+            // Find discount code if provided
+            $discountCode = null;
+            $discountAmount = 0;
+            
+            if ($request->filled('discount_code')) {
+                $discountCode = DiscountCode::where('code', $request->discount_code)
+                    ->where('is_active', true)
+                    ->first();
+
+                if ($discountCode && $discountCode->isValid()) {
+                    $amount = config('instances.pricing')[$validated['duration']];
+                    $discountAmount = $discountCode->calculateDiscount($amount);
+                }
+            }
+
+            // Create instance
             $instance = auth()->user()->instances()->create([
                 'hostname' => $validated['hostname'],
                 'minecraft_server_host' => $validated['minecraft_server_host'],
                 'minecraft_plugin_ip' => $validated['minecraft_plugin_ip'],
                 'status' => 'pending',
-                'deployment_status' => 'uncompleted'
+                'deployment_status' => 'uncompleted',
+                'discount_code_id' => $discountCode?->id,
+                'discount_amount' => $discountAmount
             ]);
 
             // Generate API tokens
             $instance->generateApiTokens();
 
-            // Create trial subscription
+            // Create subscription with discounted amount
+            $amount = config('instances.pricing')[$validated['duration']];
+            $finalAmount = max(0, $amount - ($discountAmount ?? 0));
+
             $instance->subscriptions()->create([
                 'starts_at' => now(),
                 'ends_at' => now()->addDays(7),
                 'duration' => $validated['duration'],
-                'amount' => config('instances.pricing')[$validated['duration']],
+                'amount' => $finalAmount,
                 'payment_method' => $validated['payment_method'],
-                'status' => 'pending',
+                'status' => $finalAmount === 0 ? 'paid' : 'pending',
                 'is_trial' => true
             ]);
 
-            // Send welcome notification only once, after everything is created
-            $instance->refresh(); // Ensure we have fresh data
+            // Increment usage count for discount code
+            if ($discountCode) {
+                $discountCode->increment('used_count');
+            }
+
+            $instance->refresh();
             $instance->user->notify((new InstanceCreated($instance))->onQueue('notifications'));
 
             return $instance;
