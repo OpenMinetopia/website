@@ -10,11 +10,11 @@ return [
     ],
     'payment_methods' => [
         'bank_transfer' => [
-            'account' => 'BE48143119118327',
-            'name' => 'A. Duran'
+            'account' => env('BANK_ACCOUNT', 'GIRO555'),
+            'name' => env('ACCOUNT_NAME', 'John Deer'),
         ],
         'paypal' => [
-            'email' => 'drnnaaron@gmail.com'
+            'email' => env('PAYPAL_EMAIL', 'peepeepeepee@gmail.com'),
         ]
     ]
 ];
